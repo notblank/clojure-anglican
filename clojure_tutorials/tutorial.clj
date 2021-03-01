@@ -53,7 +53,7 @@
   (if (= n 0) 1
     (loop [val n i n] ;; bind n to val and n to i
       (if (<= i 1) val
-        ;;next iter val is val * i-1 and i is i-1
+        ;;next iter val = val * i-1 and i = i-1
         (recur (*' val (dec i)) (dec i))
         )
       )

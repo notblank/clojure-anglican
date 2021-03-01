@@ -6,7 +6,6 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [anglican "1.1.0"]
                  [nstools "0.2.4"]
-                 [anglican "1.0.0"] 
                  [org.nfrac/cljbox2d.testbed "0.5.0"] 
                  [org.nfrac/cljbox2d "0.5.0"] 
                  [org.clojure/data.priority-map "0.0.7"] 
