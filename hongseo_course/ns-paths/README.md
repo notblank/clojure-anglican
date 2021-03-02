@@ -1,4 +1,4 @@
-# lecture4
+# ns-paths
 
 FIXME: description
 
@@ -10,7 +10,7 @@ Download from http://example.com/FIXME.
 
 FIXME: explanation
 
-    $ java -jar lecture4-0.1.0-standalone.jar [args]
+    $ java -jar ns-paths-0.1.0-standalone.jar [args]
 
 ## Options
 

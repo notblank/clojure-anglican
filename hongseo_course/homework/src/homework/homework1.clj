@@ -43,34 +43,33 @@
 (plot/histogram samples_fib_first)
 
 ;; Question 2
-(defn lie? [s sI]
-  (if (= sI true) s (not s)))
-
-(lie? true true)
-(map lie? [true false true] [false true true])
-
 
 ;; todo: model
-(with-primitive-procedures [lie?]
-  (defquery island_pzl [statement]
-    (let [s1 (sample (flip (/ 1 3)))
-          sI (sample (flip (/ 1 3)))
-          s2 (lie? s1 sample (flip (/ 1 3)))]
-      s1)))
 
-(doquery :importance island_pzl [true]) 
+(defquery island_pzl [s2]
+  (let [ s1 (sample (categorical 
+                       {:lie (/ 2 3) :truth (/ 1 3)}))]
+    (if (= s1 :lie)
+      (observe (categorical 
+                 { :lie (/ 1 3) :truth (/ 2 3)}) s2)
+      (observe (categorical 
+                 { :lie (/ 2 3) :truth (/ 1 3)}) s2)
+      )
+    s1))
 
-(def n_samples 1000)
 
-(def samples_island 
-  (let [ s (doquery :importance island_pzl [true])
+(defn tl_zo [s]
+  (if (= s :truth) 1 0))
+
+(tl_zo :lie)
+(tl_zo :truth)
+
+(def island_pzl_samples 
+  (let [ s (take 1000 (doquery :lmh island_pzl [:truth]))
          r (map :result s)
-         zo (map {false 0 true 1} r)]
-    (take n_samples zo)))
+         zo (map tl_zo r)]
+    zo))
 
-(/ (reduce + samples_island) n_samples)
-
-
-
+(/ (reduce + island_pzl_samples) 1000)
 
 

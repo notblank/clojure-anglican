@@ -1,4 +1,4 @@
-(ns bounce
+(ns lecture4.bounce
   (:require [org.nfrac.cljbox2d.testbed :as bed]
             [org.nfrac.cljbox2d.core :refer :all]
             [org.nfrac.cljbox2d.vec2d :as vec2d]
@@ -6,6 +6,8 @@
             [quil.middleware])
   (:use [clojure.data.priority-map]))
 
+(defn test-fn [n]
+  (+ n 1))
 
 (def circ-attr {:density 1.0
                 :category-bits 0x0008
@@ -15,7 +17,7 @@
   "ensure that input pairs have type vec2"
   [bumper-positions]
   (mapv (fn [pos]
-          (if (= (type pos) org.jbox2d.common.Vc2)
+          (if (= (type pos) org.jbox2d.common.Vec2)
             pos (vec2 pos)))
         bumper-positions))
 
