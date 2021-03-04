@@ -3,9 +3,8 @@
   (:use [anglican core emit runtime])
   (:require [gorilla-plot.core :as plot]))
 
-
-
-(reduce + pandas-samples)
+(require '[clojure.data.csv :as csv]
+         '[clojure.java.io :as io])
 
 ;; distriburion over births:
 
@@ -99,16 +98,58 @@
     (observe (normal mu sd5) (nth m 4))
     (observe (normal mu sd6) (nth m 5))
     (observe (normal mu sd7) (nth m 6))
-    mu))
+    {:mu mu 
+     :sd1 sd1 :sd2 sd2 :sd3 sd3 :sd4 sd4 :sd5 sd5 :sd6 sd6 :sd7 sd7}))
 
-(def mu-samples 
+(def seven-meas-samples 
   (take-nth 100
           (take 100000 (drop 1000 (doquery :lmh seven-meas [])))))
 
+(def mu-samples 
+  (map :mu
+       (map :result seven-meas-samples)))
 
-(let [r (map :result mu-samples)
-      nr (count r)
-      mean (/ nr (reduce + r))]
+(let [ nr (count mu-samples)
+      mean (/ nr (reduce + mu-samples))]
   mean)
 
+
+;; QUESTION 2:
+;; reading data and multiples rv.
+
+(require '[clojure.edn :as edn])
+
+;; message count data:
+(def msg-counts-data 
+  ;;(map (comp read-string first)
+  (map (comp edn/read-string first)
+       (with-open [reader (io/reader "./src/homework/txtdata.csv")]
+         (doall (csv/read-csv (slurp reader))))))
+
+
+(Math/ceil (nth msg-counts-data 1))
+
+(print msg-counts-data)
+
+(defquery change-habits [data]
+  (let [;; days:
+        tau (sample (uniform-discrete 1 76))
+        ;; avg counts before/after day tau
+        lam1 (sample (exponential 0.05))    
+        lam2 (sample (exponential 0.05))   
+         ] 
+    ;; condition on all data:
+    ;; first create the list, then execute:
+    (doall 
+      (map 
+        (fn [x i] (if (> tau i) 
+                    (observe (poisson lam1) x)
+                    (observe (poisson lam2) x)
+                    )
+          )
+        data (range (count data))))
+
+    tau))
+
+(doquery :lmh change-habits [msg-counts-data])
 
