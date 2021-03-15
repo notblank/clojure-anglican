@@ -127,19 +127,18 @@
          (doall (csv/read-csv (slurp reader))))))
 
 
-(Math/ceil (nth msg-counts-data 1))
-
 (print msg-counts-data)
 
 (defquery change-habits [data]
   (let [;; days:
         tau (sample (uniform-discrete 1 76))
-        ;; avg counts before/after day tau
+        ;; avg counts before/after day tau:
         lam1 (sample (exponential 0.05))    
         lam2 (sample (exponential 0.05))   
          ] 
     ;; condition on all data:
     ;; first create the list, then execute:
+    ;; doall instead of map / doseq instead of for
     (doall 
       (map 
         (fn [x i] (if (> tau i) 
@@ -152,4 +151,5 @@
     tau))
 
 (doquery :lmh change-habits [msg-counts-data])
+
 

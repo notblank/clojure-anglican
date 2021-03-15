@@ -6,7 +6,6 @@
   :dependencies [
                  [org.clojure/clojure "1.10.1"]
                  [anglican "1.1.0"]
-                 [metasoarous/oz "1.5.4"]
                  [gorilla-renderable "2.0.0"]
                  ]
   :main ^:skip-aot homework.core
