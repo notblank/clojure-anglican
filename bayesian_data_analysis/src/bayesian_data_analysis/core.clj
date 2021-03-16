@@ -1,5 +1,7 @@
 (ns bayesian-data-analysis.core
-  (:gen-class))
+  (:use [anglican core emit runtime])
+  (:require [oz.core :as oz]
+            [clojure.data.json :as json]))
 
 (defn -main
   "I don't do a whole lot ... yet."
